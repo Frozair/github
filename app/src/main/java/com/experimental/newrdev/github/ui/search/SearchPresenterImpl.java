@@ -29,17 +29,15 @@ public class SearchPresenterImpl implements SearchPresenter {
                 .subscribe(new Observer<User>() {
                     @Override
                     public void onCompleted() {
-                        System.out.println("I am in the onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        System.out.println("I am in the onError");
+                        view.noUserFound();
                     }
 
                     @Override
                     public void onNext(User user) {
-                        System.out.println("I am in the onNext");
                         view.navigateToUserActivity(user);
                     }
                 });

@@ -3,6 +3,7 @@ package com.experimental.newrdev.github.ui.search;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,12 +17,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by newrdev on 7/1/15.
  */
-public class SearchActivity extends Activity implements SearchView{
+public class SearchActivity extends Activity implements SearchView, View.OnClickListener{
 
     @Inject
     SearchPresenter presenter;
@@ -29,17 +29,18 @@ public class SearchActivity extends Activity implements SearchView{
     @Bind(R.id.searchText)
     EditText searchText;
 
-    //@Bind(R.id.searchButton)
-    //Button searchButton;
+    @Bind(R.id.searchButton)
+    Button searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupComponent((AppComponent) App.get(this).component());
         setContentView(R.layout.search_activity);
-        //searchButton.setOnClickListener(this);
 
         ButterKnife.bind(this);
+
+        searchButton.setOnClickListener(this);
     }
 
     private void setupComponent(AppComponent component){
@@ -57,10 +58,25 @@ public class SearchActivity extends Activity implements SearchView{
 
     @Override
     public void noUserFound() {
-
+        Toast.makeText(this,
+                getUsername() + " was not found. The search is case sensitive!",
+                Toast.LENGTH_LONG).show();
     }
 
-    @OnClick(R.id.searchButton) void search(){
-        presenter.search("newrdev");
+    @Override
+    public void onClick(View v) {
+        if(!getUsername().isEmpty()) {
+            presenter.search(getUsername());
+            hideKeyboard(v);
+        }
+    }
+
+    private String getUsername(){
+        return searchText.getText().toString().trim();
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
