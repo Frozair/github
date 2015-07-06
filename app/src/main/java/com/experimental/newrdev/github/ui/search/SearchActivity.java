@@ -2,6 +2,8 @@ package com.experimental.newrdev.github.ui.search;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * Created by newrdev on 7/1/15.
  */
-public class SearchActivity extends Activity implements SearchView, View.OnClickListener{
+public class SearchActivity extends AppCompatActivity implements SearchView, View.OnClickListener{
 
     @Inject
     SearchPresenter presenter;
@@ -41,6 +43,13 @@ public class SearchActivity extends Activity implements SearchView, View.OnClick
         ButterKnife.bind(this);
 
         searchButton.setOnClickListener(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+
+        this.setTitle("Github");
     }
 
     private void setupComponent(AppComponent component){
