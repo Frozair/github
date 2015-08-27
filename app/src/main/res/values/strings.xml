@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Github</string>
+    <string name="location_description">Location</string>
 </resources>

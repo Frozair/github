@@ -15,6 +15,7 @@ import com.experimental.newrdev.github.App;
 import com.experimental.newrdev.github.AppComponent;
 import com.experimental.newrdev.github.R;
 import com.experimental.newrdev.github.models.User;
+import com.experimental.newrdev.github.ui.common.BaseActivity;
 import com.experimental.newrdev.github.ui.user.UserActivity;
 
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * Created by newrdev on 7/1/15.
  */
-public class SearchActivity extends AppCompatActivity implements SearchView, View.OnClickListener{
+public class SearchActivity extends BaseActivity implements SearchView, View.OnClickListener{
 
     @Inject
     SearchPresenter presenter;
@@ -37,9 +38,16 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Vie
     Button searchButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupComponent((AppComponent) App.get(this).component());
+    protected void setupComponent(AppComponent component){
+        DaggerSearchComponent.builder()
+                .appComponent(component)
+                .searchModule(new SearchModule(this))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    protected void setupView(){
         setContentView(R.layout.search_activity);
 
         ButterKnife.bind(this);
@@ -52,14 +60,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView, Vie
         }
 
         this.setTitle("Github");
-    }
-
-    private void setupComponent(AppComponent component){
-        DaggerSearchComponent.builder()
-                .appComponent(component)
-                .searchModule(new SearchModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override
