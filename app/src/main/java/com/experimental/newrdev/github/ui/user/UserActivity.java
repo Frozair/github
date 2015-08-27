@@ -1,5 +1,6 @@
 package com.experimental.newrdev.github.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +12,10 @@ import com.experimental.newrdev.github.AppComponent;
 import com.experimental.newrdev.github.R;
 import com.experimental.newrdev.github.models.User;
 import com.experimental.newrdev.github.ui.common.BaseActivity;
+import com.experimental.newrdev.github.ui.repos.ReposActivity;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import javax.inject.Inject;
 
@@ -21,12 +25,9 @@ import butterknife.ButterKnife;
 /**
  * Created by newrdev on 7/5/15.
  */
-public class UserActivity extends BaseActivity implements UserView{
+public class UserActivity extends BaseActivity implements UserView, View.OnClickListener{
 
     private User user;
-
-    @Inject
-    UserPresenter presenter;
 
     @Bind(R.id.card)
     CardView card;
@@ -40,6 +41,8 @@ public class UserActivity extends BaseActivity implements UserView{
     TextView followers;
     @Bind(R.id.following)
     TextView following;
+    @Bind(R.id.repos)
+    TextView repos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class UserActivity extends BaseActivity implements UserView{
             });
         }
 
+        repos.setOnClickListener(this);
+
         this.setTitle("User Info");
     }
 
@@ -93,5 +98,18 @@ public class UserActivity extends BaseActivity implements UserView{
 
         followers.setText(String.valueOf(user.getFollowers()));
         following.setText(String.valueOf(user.getFollowing()));
+    }
+
+    @Override
+    public void showRepos() {
+        // TODO - Go to RepoActivity make sure to send repo url
+        Intent intent = new Intent(this, ReposActivity.class);
+        intent.putExtra("username", user.getLogin());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        showRepos();
     }
 }

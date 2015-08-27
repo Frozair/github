@@ -21,9 +21,4 @@ public class UserModule {
     public UserView provideView(){
         return view;
     }
-
-    @Provides
-    public UserPresenter providePresenter(UserView view, GithubService service){
-        return new UserPresenterImpl(view, service);
-    }
 }

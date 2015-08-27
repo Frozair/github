@@ -15,6 +15,4 @@ import dagger.Component;
 )
 public interface UserComponent {
     void inject(UserActivity activity);
-
-    UserPresenter getUserPresenter();
 }
